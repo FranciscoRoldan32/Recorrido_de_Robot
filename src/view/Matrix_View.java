@@ -6,7 +6,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import entities.Button;
 
 public class Matrix_View extends JPanel {
 	private static final long serialVersionUID = 1L;
