@@ -6,14 +6,16 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import entities.Button;
 
 public class Matrix_View extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private JPanel matrix_Panel,info_Panel;
-	public Matrix_View() {
+	private int row,col;
+	public Matrix_View(int row,int col) {
+		
 		initializeMatrix();
+//		drawMatrix(row,col);
 	}
 
 	private void initializeMatrix() {
@@ -26,9 +28,11 @@ public class Matrix_View extends JPanel {
 		info_Panel = new JPanel();
 		info_Panel.setBounds(637, 0, 286, 667);
 		add(info_Panel);
+		
+		
 	}
 	
-	public void drawMatrix(List <JButton> buttons,int n, int m) {
+	private void drawMatrix(List <JButton> buttons,int n, int m) {
 		matrix_Panel.removeAll();
 		matrix_Panel.setLayout(new GridLayout(n, m));
 
