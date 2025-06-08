@@ -23,13 +23,9 @@ public class Controller {
 	
 	public Controller (Main_View main_View,Matrix_View mat_View) {
 		this.main_View=main_View;
-		 this.mat_View = mat_View;
-
+		this.mat_View = mat_View;
 		initAplication();
-		
 	}
-	
-	
 
 	public void initAplication() {
 		main_View.getButton_Init().addActionListener(new ActionListener() {
@@ -45,12 +41,9 @@ public class Controller {
 					matrixService.printMatrix(); 
 					
 					main_View.setVisible(false);
-					
-	                mat_View.setVisible(true);
-	                
-	            	drawGrid(matrix); 
-	            	
-	            	currentMatrix = matrix;
+					mat_View.setVisible(true);
+					drawGrid(matrix); 
+					currentMatrix = matrix;
 
 				} catch (Exception ex) {
 					ex.printStackTrace(); 
@@ -58,12 +51,39 @@ public class Controller {
 				}
 			}
 		});
+		
 		mat_View.getBtnRunAlgorythm().addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		        try {
-//		            String resultado = correrAlgoritmoSobreMatriz(currentMatrix);
-//		            mat_View.mostrarInformacion(resultado);
+		            ResultDto resultDto = matrixService.runAlgorithm();
+		            
+		            StringBuilder info = new StringBuilder();
+		            info.append("Resultados del Algoritmo:\n\n");
+		            
+		            if (!matrixService.validateNumberOfStepsIsEven()) {
+		                info.append("No se puede encontrar un camino válido: cantidad de pasos impar.\n");
+		            } else {
+		                info.append("¿Camino válido encontrado?: ").append(resultDto.pathFound).append("\n");
+		                info.append("Tiempo sin poda: ").append(resultDto.timeWithoutPrune).append(" ms\n");
+		                info.append("Tiempo con poda: ").append(resultDto.timeWithPrune).append(" ms\n");
+		                info.append("Llamadas sin poda: ").append(resultDto.callsWithoutPrune).append("\n");
+		                info.append("Llamadas con poda: ").append(resultDto.callsWithPrune).append("\n\n");
+		                
+		                if (resultDto.pathFound) {
+		                    info.append("Camino válido:\n");
+		                    for (int[] pos : resultDto.validPath) {
+		                        info.append("[").append(pos[0]).append(",").append(pos[1]).append("] ");
+		                    }
+		                    info.append("\n");
+		                    
+		                    // Resaltar el camino en la matriz
+		                    mat_View.resaltarCamino(resultDto.validPath);
+		                }
+		            }
+		            
+		            mat_View.mostrarInformacion(info.toString());
+		            
 		        } catch (Exception ex) {
 		            ex.printStackTrace();
 		            JOptionPane.showMessageDialog(null, "Error al ejecutar el algoritmo: " + ex.getMessage());
@@ -72,36 +92,7 @@ public class Controller {
 		});
 	}
 	
-		private void drawGrid(int[][] matriz) {
-			 mat_View.drawMatrix(matriz);
-		
+	private void drawGrid(int[][] matriz) {
+		mat_View.drawMatrix(matriz);
 	}
 }
-////una vez q el user ingrese los archivos generar matriz
-//		int[][] gridTemporal = MatrixService.generateMatrix(15, 16);//matriz temporal
-//		
-//		this.matrixService = new MatrixService(gridTemporal);
-//		this.matrixService.printMatrix();
-//		
-//		ResultDto resultDto = this.matrixService.runAlgorithm();
-//		
-//		if (!this.matrixService.validateNumberOfStepsIsEven()) {
-//          System.out.println("No se puede encontrar un camino válido: cantidad de pasos impar.");
-//		} 
-//
-//      System.out.println("\n==== Resultados ====");
-//      System.out.println("¿Camino válido encontrado?: " + resultDto.pathFound);
-//      System.out.println("Tiempo sin poda: " + resultDto.timeWithoutPrune + " ms");
-//      System.out.println("Tiempo con poda: " + resultDto.timeWithPrune + " ms");
-//      System.out.println("Llamadas sin poda: " + resultDto.callsWithoutPrune);
-//      System.out.println("Llamadas con poda: " + resultDto.callsWithPrune);
-//
-//      if (resultDto.pathFound) {
-//          System.out.println("Camino válido:");
-//          for (int[] pos : resultDto.validPath) {
-//              System.out.print(Arrays.toString(pos) + " ");
-//          }
-//          System.out.println();
-//      }
-//      
-//      this.matrixService.printMatrixWithPath(resultDto.validPath);
