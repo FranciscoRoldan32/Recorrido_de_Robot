@@ -2,17 +2,15 @@ package model_service;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import model.Dto.ResultDto;
 
 public class MatrixService {
 	private int rows, cols;
 	private int[][] matrix;
-	private List<int[]> bestPath = new ArrayList<>();
+	private List<int[]> bestPath;
 	private boolean[][] visited;
 	private int totalCallsWithoutPrune = 0;
 	private int totalCallsWithPrune = 0;
@@ -52,21 +50,19 @@ public class MatrixService {
             return new ResultDto(false, 0, 0, 0, 0, Collections.emptyList());
         }
         
-        // Sin poda
         totalCallsWithoutPrune = 0;
         long start1 = System.currentTimeMillis();
         boolean foundWithoutPrune = backtrack(0, 0, 0, new ArrayList<>(), false);
         long end1 = System.currentTimeMillis();
         long timeWithoutPrune = end1 - start1;
 
-        // Con poda
         bestPath.clear();
         totalCallsWithPrune = 0;
         long start2 = System.currentTimeMillis();
         boolean foundWithPrune = backtrack(0, 0, 0, new ArrayList<>(), true);
         long end2 = System.currentTimeMillis();
         long timeWithPrune = end2 - start2;
-        
+
         return new ResultDto(
                 foundWithPrune || foundWithoutPrune,
                 timeWithoutPrune,
@@ -85,30 +81,6 @@ public class MatrixService {
 			System.out.println();
 		}
 	}
-	
-	public void printMatrixWithPath(List<int[]> path) {
-	    Set<String> pathSet = new HashSet<>();
-	    for (int[] pos : path) {
-	        pathSet.add(pos[0] + "," + pos[1]);
-	    }
-
-	    for (int i = 0; i < matrix.length; i++) {
-	        for (int j = 0; j < matrix[0].length; j++) {
-	            String key = i + "," + j;
-	            String cellStr;
-
-	            if (pathSet.contains(key)) {
-	                cellStr = String.format("[%d]", matrix[i][j]);
-	            } else {
-	                cellStr = String.format(" %d ", matrix[i][j]);
-	            }
-
-	            System.out.printf("%4s", cellStr);
-	        }
-	        System.out.println();
-	    }
-	}
-
 
 	private boolean backtrack(int i, int j, int sum, List<int[]> path, boolean usePrune) {
 		
@@ -123,7 +95,6 @@ public class MatrixService {
 		sum += this.matrix[i][j];
 		path.add(new int[] { i, j });
 
-		// Poda inteligente
 		if (usePrune) {
 			int stepsLeft = (rows - 1 - i) + (cols - 1 - j);
 
@@ -133,7 +104,6 @@ public class MatrixService {
 			}
 		}
 
-		//destino
 		if (i == rows - 1 && j == cols - 1) {
 			if (sum == 0) {
 				bestPath = new ArrayList<>(path);
@@ -145,7 +115,7 @@ public class MatrixService {
 
 		boolean found = backtrack(i + 1, j, sum, path, usePrune) || backtrack(i, j + 1, sum, path, usePrune);
 
-		path.remove(path.size() - 1); // backtrack
+		path.remove(path.size() - 1);
 		return found;
 	}
 }

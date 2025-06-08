@@ -7,15 +7,20 @@ import view.Main_View;
 import view.Matrix_View;
 
 public class Main {
-	    public static void main(String[] args) {
-	    	  Matrix_View matView = new Matrix_View();  
-	          Main_View mainView = new Main_View();
+	public static void main(String[] args) {
 
-	          Controller controller = new Controller(mainView,matView);
+		try {
+			Matrix_View matView = new Matrix_View();
+			Main_View mainView = new Main_View();
 
-	          SwingUtilities.invokeLater(() -> {
-	              mainView.setVisible(true);
-	          });
+			new Controller(mainView, matView);
+
+			SwingUtilities.invokeLater(() -> {
+				mainView.setVisible(true);
+			});
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
-
