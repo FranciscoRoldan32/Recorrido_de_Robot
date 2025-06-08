@@ -26,9 +26,12 @@ public class Main_View extends JFrame {
 	private CardLayout cardLayout;
     private JPanel mainPanel;
     private JLabel label_Title,label_Init,label_X;
-    private JTextField row;
-    private JTextField col;
-    private Controller controller;
+    private JTextField row,col;
+    private JButton button_Init;
+   
+  
+
+
 
     public Main_View() {
         setTitle("Robot en Planta");
@@ -41,12 +44,10 @@ public class Main_View extends JFrame {
 
         JPanel startPanel = new JPanel();
         startPanel.setLayout(null);
-        JButton buttonInit = new JButton("Iniciar Aplicación");
-        buttonInit.setBounds(316, 425, 311, 131);
-        buttonInit.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-        startPanel.add(buttonInit);
-
-        Matrix_View matrixViewPanel = new Matrix_View();
+        button_Init = new JButton("Iniciar Aplicación");
+        button_Init.setBounds(316, 425, 311, 131);
+        button_Init.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
+        startPanel.add(button_Init);
 
         mainPanel.add(startPanel, "inicio");
         
@@ -61,7 +62,7 @@ public class Main_View extends JFrame {
         startPanel.add(label_Init);
         
         row = new JTextField();
-        row.setBounds(257, 270, 86, 34);
+        row.setBounds(269, 270, 86, 34);
         startPanel.add(row);
         row.setColumns(10);
         
@@ -74,35 +75,41 @@ public class Main_View extends JFrame {
         col.setColumns(10);
         col.setBounds(423, 270, 86, 34);
         startPanel.add(col);
-        mainPanel.add(matrixViewPanel, "matriz");
-
-    
-        buttonInit.addActionListener(new ActionListener() {
-        	 public void actionPerformed(ActionEvent e) {
-        	        String input = row.getText().trim(); 
-        	        if (!input.matches("\\d+x\\d+")) {
-        	            JOptionPane.showMessageDialog(null, "Formato inválido. Use 'n X m', por ejemplo: 5x7.");
-        	            return;
-        	        }
-
-        	        String[] partes = input.split("x");
-        	        int n = Integer.parseInt(partes[0]);
-        	        int m = Integer.parseInt(partes[1]);
-
-        	      
-        	        if (n < 1 || m < 1) {
-        	            JOptionPane.showMessageDialog(null, "Las dimensiones deben ser mayores que cero.");
-        	            return;
-        	        }
-        	        controller.initAplication(n, m);
-        	    }
-        	});
-
-        getContentPane().add(mainPanel); 
-        setVisible(true);
+        
+     
+        
+        mainPanel.add(startPanel, "inicio");
+        
+        getContentPane().add(mainPanel);
+        
+        cardLayout.show(mainPanel, "inicio");
+       
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Main_View());
+    public JButton getButton_Init() {
+		return button_Init;
+	}
+    public int getRow() throws IllegalArgumentException {
+    	   String input = row.getText().trim();
+           if (!input.matches("\\d+")) {
+               throw new IllegalArgumentException("La fila debe ser un número entero positivo.");
+           }
+           int n = Integer.parseInt(input);
+           if (n < 1) {
+               throw new IllegalArgumentException("La fila debe ser mayor que cero.");
+           }
+           return n;
+    }
+
+    public int getCol() {
+    	 String input = col.getText().trim();
+         if (!input.matches("\\d+")) {
+             throw new IllegalArgumentException("La columna debe ser un número entero positivo.");
+         }
+         int m = Integer.parseInt(input);
+         if (m < 1) {
+             throw new IllegalArgumentException("La columna debe ser mayor que cero.");
+         }
+         return m;
     }
 }

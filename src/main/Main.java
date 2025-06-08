@@ -1,21 +1,21 @@
 package main;
 
+import javax.swing.SwingUtilities;
+
 import controller.Controller;
 import view.Main_View;
+import view.Matrix_View;
 
 public class Main {
-	public static void main(String[] args) {
-		try {
-//			javax.swing.SwingUtilities.invokeLater(() -> {
-//				Main_View view = new Main_View();
-//
-//				new Controller();
-//			});
+	    public static void main(String[] args) {
+	    	  Matrix_View matView = new Matrix_View();  
+	          Main_View mainView = new Main_View();
 
-			new Controller();
-		} catch (Exception e) {
-			System.out.println(e);
-		}
+	          Controller controller = new Controller(mainView,matView);
+
+	          SwingUtilities.invokeLater(() -> {
+	              mainView.setVisible(true);
+	          });
 	}
-
 }
+
