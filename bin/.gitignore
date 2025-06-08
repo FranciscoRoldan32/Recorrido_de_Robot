@@ -1,6 +1,7 @@
 /controller/
 /entities/
-/model_service/
-/view/
 /main/
 /model/
+/model_service/
+/module-info.class
+/view/

@@ -28,7 +28,9 @@ public class Main_View extends JFrame {
     private JLabel label_Title,label_Init,label_X;
     private JTextField row,col;
     private JButton button_Init;
-    
+   
+  
+
 
 
     public Main_View() {
@@ -74,12 +76,14 @@ public class Main_View extends JFrame {
         col.setBounds(423, 270, 86, 34);
         startPanel.add(col);
         
+     
+        
         mainPanel.add(startPanel, "inicio");
         
         getContentPane().add(mainPanel);
         
         cardLayout.show(mainPanel, "inicio");
-  
+       
     }
 
     public JButton getButton_Init() {
@@ -107,12 +111,5 @@ public class Main_View extends JFrame {
              throw new IllegalArgumentException("La columna debe ser mayor que cero.");
          }
          return m;
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Main_View view = new Main_View();
-            view.setVisible(true); 
-        });
     }
 }
