@@ -27,7 +27,7 @@ public class Main_View extends JFrame {
     private JPanel mainPanel;
     private JLabel label_Title,label_Init,label_X;
     private JTextField row,col;
-    private JButton button_Init;
+    private JButton button_Init,btnCargarArchivo;
    
   
 
@@ -58,27 +58,31 @@ public class Main_View extends JFrame {
         
         label_Init = new JLabel("Ingresar el tamaño de la Matriz:");
         label_Init.setFont(new Font("Mongolian Baiti", Font.PLAIN, 19));
-        label_Init.setBounds(10, 270, 249, 46);
+        label_Init.setBounds(10, 263, 249, 46);
         startPanel.add(label_Init);
         
         row = new JTextField();
-        row.setBounds(269, 270, 86, 34);
+        row.setBounds(316, 270, 86, 34);
         startPanel.add(row);
         row.setColumns(10);
         
         label_X = new JLabel("X");
         label_X.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        label_X.setBounds(377, 287, 46, 14);
+        label_X.setBounds(481, 277, 46, 14);
         startPanel.add(label_X);
         
         col = new JTextField();
         col.setColumns(10);
-        col.setBounds(423, 270, 86, 34);
+        col.setBounds(557, 270, 86, 34);
         startPanel.add(col);
         
      
         
         mainPanel.add(startPanel, "inicio");
+        
+        btnCargarArchivo = new JButton("Cargar Archivo");
+        btnCargarArchivo.setBounds(400, 347, 127, 46);
+        startPanel.add(btnCargarArchivo);
         
         getContentPane().add(mainPanel);
         
@@ -112,6 +116,8 @@ public class Main_View extends JFrame {
          }
          return m;
     }
-    
-    
+    public JButton getBtnCargarArchivo() {
+        return btnCargarArchivo;
+    }
+
 }

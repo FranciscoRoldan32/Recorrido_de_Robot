@@ -122,8 +122,6 @@ public class MatrixService {
 
 		sum += this.matrix[i][j];
 		path.add(new int[] { i, j });
-
-		// Poda inteligente
 		if (usePrune) {
 			int stepsLeft = (rows - 1 - i) + (cols - 1 - j);
 
@@ -133,7 +131,6 @@ public class MatrixService {
 			}
 		}
 
-		//destino
 		if (i == rows - 1 && j == cols - 1) {
 			if (sum == 0) {
 				bestPath = new ArrayList<>(path);

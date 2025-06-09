@@ -19,7 +19,7 @@ public class Matrix_View extends JFrame {
 	
 	private JPanel matrix_Panel,info_Panel;
 	private JTextArea textInformation;
-	private JButton btnRunAlgorythm;
+	private JButton btnRunAlgorythm,btnReturn;
 	private JButton[][] robot_Path;
 	private List<JButton> currentButtons;
 	
@@ -32,16 +32,16 @@ public class Matrix_View extends JFrame {
 	}
 
 	private void initializeMatrix() {
-		setLayout(null); 
+		getContentPane().setLayout(null); 
 
 		matrix_Panel = new JPanel();
 		matrix_Panel.setBounds(0, 0, 636, 667);
-		add(matrix_Panel);
+		getContentPane().add(matrix_Panel);
 		matrix_Panel.setLayout(new GridLayout(1, 0, 0, 0));
 
 		info_Panel = new JPanel();
 		info_Panel.setBounds(637, 0, 286, 667);
-		add(info_Panel);
+		getContentPane().add(info_Panel);
 		info_Panel.setLayout(null);
 		
 		textInformation = new JTextArea();
@@ -53,9 +53,15 @@ public class Matrix_View extends JFrame {
 		info_Panel.add(scrollPane);
 		
 		btnRunAlgorythm = new JButton("Mostrar Camino");
+		btnRunAlgorythm.setBounds(45, 11, 200, 67);
 		btnRunAlgorythm.setFont(new Font("Mongolian Baiti", Font.BOLD, 17));
-		btnRunAlgorythm.setBounds(45, 71, 200, 67);
 		info_Panel.add(btnRunAlgorythm);
+		
+		btnReturn = new JButton("Menu");
+		btnReturn.setBackground(new Color(255, 0, 0));
+		btnReturn.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		btnReturn.setBounds(95, 100, 89, 23);
+		info_Panel.add(btnReturn);
 	}
 	
 	public JButton getBtnRunAlgorythm() {
@@ -112,5 +118,18 @@ public class Matrix_View extends JFrame {
 	        robot_Path[i][j].setBackground(Color.GREEN);
 	        robot_Path[i][j].setForeground(Color.BLACK);
 	    }
+	}
+	public JButton getBtnReturn() {
+	    return btnReturn;
+	}
+	public void resetMatrixView() {
+	    matrix_Panel.removeAll();  
+	    matrix_Panel.revalidate();
+	    matrix_Panel.repaint();
+
+	    textInformation.setText(""); 
+
+	    robot_Path = null;         
+	    currentButtons = null;      
 	}
 }
