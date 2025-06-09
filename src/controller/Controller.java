@@ -2,6 +2,16 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import model.Dto.ResultDto;
@@ -43,15 +53,31 @@ public class Controller {
 				}
 			}
 		});
+		main_View.getBtnCargarArchivo().addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        JFileChooser fileChooser = new JFileChooser();
+		        int seleccion = fileChooser.showOpenDialog(null);
 
-		mat_View.getBtnBack().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mat_View.setVisible(false);
-				main_View.setVisible(true);
-			}
-		});
+		        if (seleccion == JFileChooser.APPROVE_OPTION) {
+		            File archivo = fileChooser.getSelectedFile();
+		            try {
+		                int[][] matriz = cargarMatrizDesdeArchivo(archivo);
+		                matrixService = new MatrixService(matriz);
+		                
+		                matrixService.printMatrix(); 
+		                currentMatrix = matriz;
 
+		                main_View.setVisible(false);
+		                mat_View.setVisible(true);
+		                drawGrid(matriz);
+
+		            } catch (IOException ex) {
+		                JOptionPane.showMessageDialog(null, "Error al leer el archivo: " + ex.getMessage());
+		            }
+		        }
+		    }
+		});	
 		mat_View.getBtnRunAlgorythm().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -89,9 +115,50 @@ public class Controller {
 				}
 			}
 		});
+		mat_View.getBtnReturn().addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        mat_View.resetMatrixView(); 
+		        mat_View.setVisible(false); 
+		        main_View.setVisible(true);
+
+		        currentMatrix = null;      
+		        matrixService = null;   
+		    }
+		});
 	}
 
 	private void drawGrid(int[][] matriz) {
 		mat_View.drawMatrix(matriz);
+	}
+	private int[][] cargarMatrizDesdeArchivo(File archivo) throws IOException {
+	    List<int[]> filas = new ArrayList<>();
+
+	    try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+	        String linea;
+	        while ((linea = br.readLine()) != null) {
+	            String[] tokens = linea.trim().split("\\s+");
+	            int[] fila = new int[tokens.length];
+	            for (int i = 0; i < tokens.length; i++) {
+	                fila[i] = Integer.parseInt(tokens[i]);
+	            }
+	            filas.add(fila);
+	        }
+	    }
+
+	    // Validar que todas las filas tengan la misma cantidad de columnas
+	    int columnas = filas.get(0).length;
+	    for (int[] fila : filas) {
+	        if (fila.length != columnas) {
+	            throw new IOException("Todas las filas deben tener la misma cantidad de columnas.");
+	        }
+	    }
+
+	    int[][] matriz = new int[filas.size()][columnas];
+	    for (int i = 0; i < filas.size(); i++) {
+	        matriz[i] = filas.get(i);
+	    }
+
+	    return matriz;
 	}
 }

@@ -94,7 +94,6 @@ public class MatrixService {
 
 		sum += this.matrix[i][j];
 		path.add(new int[] { i, j });
-
 		if (usePrune) {
 			int stepsLeft = (rows - 1 - i) + (cols - 1 - j);
 
