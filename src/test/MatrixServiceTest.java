@@ -1,12 +1,9 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import model.Dto.ResultDto;
 import model_service.MatrixService;
@@ -17,7 +14,7 @@ public class MatrixServiceTest {
     private int[][] testMatrixEvenSteps;
     private int[][] testMatrixOddSteps;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         // Matriz 2x2 (2+2-1=3 pasos, impar)
         testMatrixOddSteps = new int[][]{
@@ -25,8 +22,7 @@ public class MatrixServiceTest {
             {-1, 1}
         };
 
-        // Matriz 3x3 (3+3-1=5 pasos, impar)
-        // Pero vamos a hacer un 2x3 (2+3-1=4 pasos, par)
+        // Matriz 2x3 (2+3-1=4 pasos, par)
         testMatrixEvenSteps = new int[][]{
             {1, -1, 1},
             {-1, 1, -1}
@@ -34,7 +30,6 @@ public class MatrixServiceTest {
     }
 
     @Test
-    @DisplayName("Prueba de generación de matriz")
     public void testGenerateMatrix() {
         int[][] generatedMatrix = MatrixService.generateMatrix(3, 4);
         assertEquals(3, generatedMatrix.length);
@@ -42,40 +37,37 @@ public class MatrixServiceTest {
     }
 
     @Test
-    @DisplayName("Validación de número de pasos par/impar")
-    public void testValidateNumberOfStepsIsEven() {
-        matrixService = new MatrixService(testMatrixOddSteps);
-        assertFalse(matrixService.validateNumberOfStepsIsEven(), "Debería ser impar (3 pasos)");
-
+    public void testValidateNumberOfStepsIsEven_returTrue() {
         matrixService = new MatrixService(testMatrixEvenSteps);
-        assertTrue(matrixService.validateNumberOfStepsIsEven(), "Debería ser par (4 pasos)");
+        assertTrue("Debería ser par (4 pasos)", matrixService.validateNumberOfStepsIsEven());
+    }
+    
+    @Test
+    public void testValidateNumberOfStepsIsEven_returnFalse() {
+        matrixService = new MatrixService(testMatrixOddSteps);
+        assertFalse("Debería ser impar (3 pasos)", matrixService.validateNumberOfStepsIsEven());
     }
 
     @Test
-    @DisplayName("Validación del número de pasos correcto")
     public void testGetNumberOfSteps() {
         matrixService = new MatrixService(testMatrixEvenSteps);
         int steps = matrixService.getNumberOfSteps();
-        assertEquals(4, steps, "Número de pasos incorrecto para 2x3");
+        assertEquals("Número de pasos incorrecto para 2x3", 4, steps);
     }
 
     @Test
-    @DisplayName("Prueba de runAlgorithm con matriz sin solución")
     public void testRunAlgorithmNoSolution() {
-        // Matriz sin solución (imposible lograr suma 0 al final)
         int[][] noSolutionMatrix = {
             {1, 1},
             {1, 1}
         };
         matrixService = new MatrixService(noSolutionMatrix);
         ResultDto result = matrixService.runAlgorithm();
-        assertFalse(result.pathFound, "No debería encontrar camino");
+        assertFalse("No debería encontrar camino", result.pathFound);
     }
 
     @Test
-    @DisplayName("Prueba de runAlgorithm con matriz con solución")
     public void testRunAlgorithmWithSolution() {
-        // Matriz pequeña con camino válido
         int[][] solutionMatrix = {
             {1, -1},
             {-1, 1}
@@ -83,17 +75,17 @@ public class MatrixServiceTest {
         matrixService = new MatrixService(solutionMatrix);
         ResultDto result = matrixService.runAlgorithm();
 
-        assertTrue(result.pathFound, "Debería encontrar camino");
-        assertNotNull(result.validPath, "Camino no debería ser nulo");
-        assertFalse(result.validPath.isEmpty(), "Camino no debería estar vacío");
+        assertTrue("Debería encontrar camino", result.pathFound);
+        assertNotNull("Camino no debería ser nulo", result.validPath);
+        assertFalse("Camino no debería estar vacío", result.validPath.isEmpty());
     }
 
     @Test
-    @DisplayName("Verificación de llamadas a backtrack")
     public void testBacktrackCalls() {
         matrixService = new MatrixService(testMatrixEvenSteps);
         ResultDto result = matrixService.runAlgorithm();
-        assertTrue(result.callsWithoutPrune > 0, "Debería haber al menos una llamada sin poda");
-        assertTrue(result.callsWithPrune > 0, "Debería haber al menos una llamada con poda");
+        assertTrue("Debería haber al menos una llamada sin poda", result.callsWithoutPrune > 0);
+        assertTrue("Debería haber al menos una llamada con poda", result.callsWithPrune > 0);
     }
 }
+
