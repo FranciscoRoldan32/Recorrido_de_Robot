@@ -3,16 +3,18 @@ package view;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 
 import java.awt.Font;
 
@@ -21,59 +23,59 @@ public class Matrix_View extends JFrame {
 
 	private JPanel matrix_Panel, info_Panel;
 	private JTextArea textInformation;
-	private JButton btnRunAlgorythm,btnReturn;
+	private JButton btnRunAlgorythm, btnReturn;
 	private JButton[][] robot_Path;
 	private List<JButton> currentButtons;
 
 	public Matrix_View() {
-		initializeMatrix();
 		setTitle("Vista de Matriz");
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
+
+		initializeMatrix();
 	}
 
 	private void initializeMatrix() {
-		getContentPane().setLayout(null); 
+		getContentPane().setLayout(new BorderLayout());
 
 		matrix_Panel = new JPanel();
-		matrix_Panel.setBounds(0, 0, 636, 667);
-		getContentPane().add(matrix_Panel);
-		matrix_Panel.setLayout(new GridLayout(1, 0, 0, 0));
+		matrix_Panel.setLayout(new GridLayout(1, 0));
+		getContentPane().add(matrix_Panel, BorderLayout.CENTER);
 
 		info_Panel = new JPanel();
-		info_Panel.setBounds(637, 0, 286, 667);
-		getContentPane().add(info_Panel);
-		info_Panel.setLayout(null);
-		
+		info_Panel.setPreferredSize(new Dimension(300, getHeight()));
+		info_Panel.setLayout(new BoxLayout(info_Panel, BoxLayout.Y_AXIS));
+		getContentPane().add(info_Panel, BorderLayout.EAST);
+
+		btnRunAlgorythm = new JButton("Mostrar Camino");
+		btnRunAlgorythm.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnRunAlgorythm.setFont(new Font("Mongolian Baiti", Font.BOLD, 17));
+		info_Panel.add(Box.createVerticalStrut(20));
+		info_Panel.add(btnRunAlgorythm);
+
+		btnReturn = new JButton("Menu");
+		btnReturn.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnReturn.setBackground(new Color(255, 0, 0));
+		btnReturn.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		info_Panel.add(Box.createVerticalStrut(20));
+		info_Panel.add(btnReturn);
+
 		textInformation = new JTextArea();
 		textInformation.setEditable(false);
 		textInformation.setLineWrap(true);
 		textInformation.setWrapStyleWord(true);
-		textInformation.setFont(new Font("Mongolian Baiti",Font.CENTER_BASELINE, 20));
+		textInformation.setFont(new Font("Mongolian Baiti", Font.CENTER_BASELINE, 20));
 
 		JScrollPane scrollPane = new JScrollPane(textInformation);
-		scrollPane.setBounds(10, 217, 266, 439);
+		scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+		scrollPane.setPreferredSize(new Dimension(280, 400));
+		info_Panel.add(Box.createVerticalStrut(20));
 		info_Panel.add(scrollPane);
-		
-		btnRunAlgorythm = new JButton("Mostrar Camino");
-		btnRunAlgorythm.setBounds(45, 11, 200, 67);
-		btnRunAlgorythm.setFont(new Font("Mongolian Baiti", Font.BOLD, 17));
-		info_Panel.add(btnRunAlgorythm);
-		
-		btnReturn = new JButton("Menu");
-		btnReturn.setBackground(new Color(255, 0, 0));
-		btnReturn.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
-		btnReturn.setBounds(95, 100, 89, 23);
-		info_Panel.add(btnReturn);
 	}
 
 	public JButton getBtnRunAlgorythm() {
 		return btnRunAlgorythm;
-	}
-	
-	public JButton getBtnBack() {
-		return btnBack;
 	}
 
 	public void drawMatrix(int[][] matriz) {
@@ -124,17 +126,19 @@ public class Matrix_View extends JFrame {
 			robot_Path[i][j].setForeground(Color.BLACK);
 		}
 	}
+
 	public JButton getBtnReturn() {
-	    return btnReturn;
+		return btnReturn;
 	}
+
 	public void resetMatrixView() {
-	    matrix_Panel.removeAll();  
-	    matrix_Panel.revalidate();
-	    matrix_Panel.repaint();
+		matrix_Panel.removeAll();
+		matrix_Panel.revalidate();
+		matrix_Panel.repaint();
 
-	    textInformation.setText(""); 
+		textInformation.setText("");
 
-	    robot_Path = null;         
-	    currentButtons = null;      
+		robot_Path = null;
+		currentButtons = null;
 	}
 }
